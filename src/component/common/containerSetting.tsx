@@ -150,7 +150,6 @@ export const ContainerSetting = (props: ContainerSettingProps) => {
               />
             </div>
           </div>
-
         </div>
       )}
       <div>
@@ -174,6 +173,32 @@ export const ContainerSetting = (props: ContainerSettingProps) => {
             className="w-full"
             data-tag="padding"
             value={props.data.padding}
+            onChange={onTextChange}
+          />
+        </div>
+      </div>
+
+      <div>
+        <div className="font-bold text-[10px]">For Path</div>
+        <div>
+          <Input
+            type="text"
+            className="w-full"
+            data-tag="forPath"
+            value={props.data.forPath}
+            onChange={onTextChange}
+          />
+        </div>
+      </div>
+
+      <div>
+        <div className="font-bold text-[10px]">For Item Name</div>
+        <div>
+          <Input
+            type="text"
+            className="w-full"
+            data-tag="forItemName"
+            value={props.data.forItemName}
             onChange={onTextChange}
           />
         </div>

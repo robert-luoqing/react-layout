@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 import { ContainerSetting } from "../../common/containerSetting";
-import { LabelModel } from "./label";
-import { Input, Select } from "antd";
+import { InputModel } from "./input";
+import { Input } from "antd";
 
-export interface LabelSettingProps {
-  data: LabelModel;
+export interface InputSettingProps {
+  data: InputModel;
   onChange: (key: string, value: any) => void;
 }
 
-export const LabelSetting = (props: LabelSettingProps) => {
+export const InputSetting = (props: InputSettingProps) => {
   const onTextChange = useCallback(
     (event: any) => {
       const value = event.target.value;
@@ -17,14 +17,20 @@ export const LabelSetting = (props: LabelSettingProps) => {
     },
     [props]
   );
-  const onSelectChange = useCallback(
-    (tag: string, value: any) => {
-      props.onChange(tag, value);
-    },
-    [props]
-  );
   return (
     <div className="flex flex-col gap-2">
+      <div>
+        <div className="font-bold text-[10px]">Type</div>
+        <div>
+          <Input
+            type="text"
+            className="w-full"
+            data-tag="rawType"
+            value={props.data.rawType}
+            onChange={onTextChange}
+          />
+        </div>
+      </div>
       <div>
         <div className="font-bold text-[10px]">Text</div>
         <div>
@@ -61,34 +67,7 @@ export const LabelSetting = (props: LabelSettingProps) => {
           />
         </div>
       </div>
-      <div>
-        <div className="font-bold text-[10px]">Vertical Align</div>
-        <div>
-          <Select
-            className="w-full"
-            value={props.data.verticalAlign}
-            onChange={(val: string) => onSelectChange("verticalAlign", val)}
-          >
-            <option value="top">Top</option>
-            <option value="center">Center</option>
-            <option value="bottom">Bottom</option>
-          </Select>
-        </div>
-      </div>
-      <div>
-        <div className="font-bold text-[10px]">Text Align</div>
-        <div>
-          <Select
-            className="w-full"
-            value={props.data.textAlign}
-            onChange={(val: string) => onSelectChange("textAlign", val)}
-          >
-            <option value="left">Left</option>
-            <option value="center">Center</option>
-            <option value="right">Right</option>
-          </Select>
-        </div>
-      </div>
+
       <ContainerSetting data={props.data} onChange={props.onChange} />
     </div>
   );

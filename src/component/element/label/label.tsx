@@ -1,11 +1,17 @@
-import { useRef } from "react";
-import { Container, ContainerModel, ComponentProps } from "../../common/container";
+import { useMemo, useRef } from "react";
+import {
+  Container,
+  ContainerModel,
+  ComponentProps,
+} from "../../common/container";
 
 export interface LabelModel extends ContainerModel {
   type: "Label";
-  text: string;
-  fontSize: number;
-  fontWeight: string;
+  text?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  verticalAlign?: "top" | "center" | "bottom";
+  textAlign?: "left" | "right" | "center";
 }
 
 export interface LabelProps extends ComponentProps {
@@ -14,6 +20,26 @@ export interface LabelProps extends ComponentProps {
 export const Label = (props: LabelProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const data = props.data as LabelModel;
+  const alignItems = useMemo(() => {
+    switch (data.verticalAlign) {
+      case "bottom":
+        return "flex-end";
+      case "center":
+        return "center";
+      default:
+        return "flex-start";
+    }
+  }, [data.verticalAlign]);
+  const justifyContent = useMemo(()=> {
+    switch (data.textAlign) {
+      case "right":
+        return "flex-end";
+      case "center":
+        return "center";
+      default:
+        return "flex-start";
+    }
+  }, [data.textAlign])
 
   return (
     <Container
@@ -24,10 +50,12 @@ export const Label = (props: LabelProps) => {
     >
       <div
         ref={containerRef}
-        className="w-full h-full"
+        className="w-full h-full flex flex-row"
         style={{
           fontSize: data?.fontSize,
           fontWeight: data?.fontWeight,
+          justifyContent,
+          alignItems,
         }}
       >
         {data?.text}

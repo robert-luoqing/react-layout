@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { isNil } from "lodash";
 import { PositionModel } from "../../models/positionModel";
 import { positionUtil } from "../../utils/positionUtil";
 import { unitUtil } from "../../utils/unitUtil";
@@ -18,11 +17,18 @@ export interface ContainerModel {
   position?: "absolute" | "static";
   display?: "block" | "inline-block";
   padding?: string;
+  // If the prop is exist, the component will be collection
+  forPath?: string;
+  // If for path exist, the itemName is the name of item
+  // Like react, we have array object users, the forPath is "users"
+  // If the item name is "user", the child can be set value to {user.name}
+  // like users.map(user => {....})
+  forItemName?: string;
 }
 
 export interface ComponentProps {
   children?: React.ReactNode;
-  data?: ContainerModel;
+  data: ContainerModel;
   parentData?: ContainerModel;
   selected?: boolean;
   onClick?: (data: ContainerModel | undefined) => void;
@@ -49,6 +55,9 @@ export interface ComponentProps {
 export interface ContainerProps extends ComponentProps {
   draggable?: boolean;
   resize?: "both" | "vertical" | "horizontal";
+  noPadding?: boolean;
+  noBorder?: boolean;
+  noBackground?: boolean;
 }
 
 export const Container = (props: ContainerProps) => {
@@ -214,9 +223,9 @@ export const Container = (props: ContainerProps) => {
         <div
           className="w-full h-full relative overflow-hidden"
           style={{
-            padding: props.data?.padding,
-            border: props.data?.border,
-            background: props.data?.background,
+            padding: props.noPadding ? undefined : props.data?.padding,
+            border: props.noBorder ? undefined : props.data?.border,
+            background: props.noBackground ? undefined : props.data?.background,
           }}
         >
           {props.children}

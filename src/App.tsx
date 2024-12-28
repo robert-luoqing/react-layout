@@ -12,6 +12,11 @@ import { LabelButton } from "./component/element/label/labelButton";
 import { DivContainerButton } from "./component/container/divContainer/divContainerButton";
 import { DivContainerSetting } from "./component/container/divContainer/divContainerSetting";
 import { LabelSetting } from "./component/element/label/labelSetting";
+import { Input } from "./component/element/input/input";
+import { InputSetting } from "./component/element/input/inputSetting";
+import { InputButton } from "./component/element/input/inputButton";
+import { Button, Modal } from "antd";
+import { Preview } from "./component/preview";
 
 function replaceData(
   oldData: any,
@@ -20,8 +25,14 @@ function replaceData(
   rootData: any
 ) {
   if (parentData) {
-    const index = parentData.children.indexOf(oldData);
-    parentData.children[index] = newData;
+    for (let index = 0; index < parentData.children?.length; index++) {
+      const item = parentData.children[index];
+      if (item.id === oldData.id) {
+        parentData.children[index] = newData;
+        break;
+      }
+    }
+
     return { ...rootData };
   } else {
     return newData;
@@ -194,6 +205,19 @@ const App = () => {
             onDragEnd={onDragEnd}
           />
         );
+      case "Input":
+        return (
+          <Input
+            key={data.id}
+            data={data}
+            parentData={parentData}
+            selected={selectedItemIds.includes(data.id)}
+            onSizeChanged={onSizeChanged}
+            onClick={onClick}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+          />
+        );
     }
 
     return null;
@@ -211,6 +235,8 @@ const App = () => {
     setRootData({ ...rootData });
   };
 
+  const [showPreview, setShowPreview] = useState(false);
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-row items-center w-full h-full">
@@ -219,10 +245,16 @@ const App = () => {
         </div>
         <div className="w-[300px] h-full border-l-[1px] border-solid border-l-gray-400 p-[16px] flex flex-col gap-[8px]">
           <div>
+            <button onClick={() => setShowPreview(true)}>Preview</button>
+          </div>
+          <div>
             <DivContainerButton />
           </div>
-          <div draggable="true">
+          <div>
             <LabelButton />
+          </div>
+          <div>
+            <InputButton />
           </div>
           <div>
             {!!selectedData && selectedData.type === "DivContainer" && (
@@ -237,9 +269,28 @@ const App = () => {
                 onChange={onSelectedDataChanged}
               />
             )}
+            {!!selectedData && selectedData.type === "Input" && (
+              <InputSetting
+                data={selectedData}
+                onChange={onSelectedDataChanged}
+              />
+            )}
           </div>
         </div>
       </div>
+      {showPreview && (
+        <Modal
+          open={true}
+          width={rootData.width}
+          onClose={() => setShowPreview(false)}
+          onCancel={() => setShowPreview(false)}
+          onOk={() => setShowPreview(false)}
+        >
+          <div className="pt-[30px]">
+          <Preview elementData={rootData} />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
