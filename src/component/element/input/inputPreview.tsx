@@ -6,6 +6,8 @@ import {
 } from "../../common/containerPreview";
 import { InputModel } from "./input";
 import { objUtil } from "../../../utils/objUtil";
+import { unitUtil } from "../../../utils/unitUtil";
+import { isNil, omitBy } from "lodash";
 
 export interface InputPreviewProps extends ComponentPreviewProps {
   children?: undefined;
@@ -26,27 +28,43 @@ export const InputPreview = (props: InputPreviewProps) => {
       props.forData
     );
   }, [elementData?.text, props.data, props.forData]);
-
+  const containerElementData = useMemo(() => {
+    return {
+      ...elementData,
+      border: undefined,
+      borderLeft: undefined,
+      borderRight: undefined,
+      borderTop: undefined,
+      borderBottom: undefined,
+      padding: undefined,
+      background: undefined,
+      borderRadius: undefined,
+    };
+  }, [elementData]);
+  const innerStyle = {
+    fontSize: elementData?.fontSize,
+    fontWeight: elementData?.fontWeight,
+    padding: elementData?.padding,
+    border: elementData?.border,
+    borderLeft: elementData?.borderLeft,
+    borderRight: elementData?.borderRight,
+    borderTop: elementData?.borderTop,
+    borderBottom: elementData?.borderBottom,
+    background: elementData?.background,
+    borderRadius: unitUtil.sizeParse(elementData?.borderRadius),
+  };
   return (
     <ContainerPreview
       {...{ ...props, children: undefined }}
-      elementData={props.elementData}
-      noBorder={true}
-      noBackground={true}
-      noPadding={true}
+      elementData={containerElementData}
+      rawElementData={props.rawElementData}
     >
       <div ref={containerRef} className="w-full h-full">
         <AntdInput
           value={value || ""}
           className="w-full h-full"
           type={elementData.rawType}
-          style={{
-            fontSize: elementData?.fontSize,
-            fontWeight: elementData?.fontWeight,
-            padding: elementData?.padding,
-            border: elementData?.border,
-            background: elementData?.background,
-          }}
+          style={omitBy(innerStyle, isNil)}
           onChange={(e) =>
             props.onChange(
               e.target.value,

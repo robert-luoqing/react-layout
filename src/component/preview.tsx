@@ -1,13 +1,15 @@
 import { ContainerModel } from "./common/container";
-import { DivContainerPreview } from "./container/divContainer/divContainerPreview";
-import { LabelPreview } from "./element/label/labelPreview";
-import { InputPreview } from "./element/input/inputPreview";
 import { useState } from "react";
 import { objUtil } from "../utils/objUtil";
 import { isNil } from "lodash";
+import { funcUtil } from "../utils/funcUtil";
+import { UIElement } from "../models/UIElement";
+
 
 export interface PreviewProps {
   elementData: ContainerModel;
+  uiElements: UIElement[];
+  uiElementsMap: { [name: string]: UIElement } ;
 }
 
 export const Preview = (props: PreviewProps) => {
@@ -45,6 +47,17 @@ export const Preview = (props: PreviewProps) => {
     if (!elementData) {
       return null;
     }
+    if (elementData.if) {
+      const context = { ...data };
+      for (const item of forData) {
+        context[item.forItemName] = item.forItemData;
+      }
+      const result = funcUtil.evaluateCondition(elementData.if, context);
+      if (!result) {
+        return null;
+      }
+    }
+
     if (elementData.forPath && elementData.forItemName) {
       const forListData = objUtil.getPropFromDataAndForData(
         data,
@@ -72,40 +85,60 @@ export const Preview = (props: PreviewProps) => {
     forData: Array<{ forItemName: string; forItemData: any }>,
     index?: number
   ) => {
-    switch (elementData.type) {
-      case "DivContainer":
-        return (
-          <DivContainerPreview
-            key={elementData.id + "-" + index}
-            elementData={elementData}
-            data={data}
-            forData={[...forData]}
-          >
-            {elementData.children?.map((item: any) =>
-              renderByData(item, forData)
-            )}
-          </DivContainerPreview>
-        );
-      case "Label":
-        return (
-          <LabelPreview
-            key={elementData.id + "-" + index}
-            elementData={elementData}
-            data={data}
-            forData={[...forData]}
-          />
-        );
-      case "Input":
-        return (
-          <InputPreview
-            key={elementData.id + "-" + index}
-            elementData={elementData}
-            data={data}
-            forData={[...forData]}
-            onChange={onInputChange}
-          />
-        );
+    const PreviewElement = props.uiElementsMap[elementData.type]?.previewComponent;
+    if (PreviewElement) {
+      return (
+        <PreviewElement
+          key={elementData.id + "-" + index}
+          rawElementData={elementData}
+          elementData={elementData}
+          data={data}
+          forData={[...forData]}
+          onChange={onInputChange}
+        >
+          {elementData.children?.map((item: any) =>
+            renderByData(item, forData)
+          )}
+        </PreviewElement>
+      );
     }
+    // switch (elementData.type) {
+    //   case "DivContainer":
+    //     return (
+    //       <DivContainerPreview
+    //         key={elementData.id + "-" + index}
+    //         rawElementData={elementData}
+    //         elementData={elementData}
+    //         data={data}
+    //         forData={[...forData]}
+    //       >
+    //         {elementData.children?.map((item: any) =>
+    //           renderByData(item, forData)
+    //         )}
+    //       </DivContainerPreview>
+    //     );
+    //   case "Label":
+    //     return (
+    //       <LabelPreview
+    //         key={elementData.id + "-" + index}
+    //         rawElementData={elementData}
+    //         elementData={elementData}
+    //         data={data}
+    //         forData={[...forData]}
+    //       />
+    //     );
+    //   case "Input":
+    //     return (
+    //       <InputPreview
+    //         key={elementData.id + "-" + index}
+    //         rawElementData={elementData}
+    //         elementData={elementData}
+    //         data={data}
+    //         forData={[...forData]}
+    //         onChange={onInputChange}
+    //       />
+    //     );
+    // }
 
     return null;
   };

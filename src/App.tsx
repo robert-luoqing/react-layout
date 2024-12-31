@@ -15,8 +15,43 @@ import { LabelSetting } from "./component/element/label/labelSetting";
 import { Input } from "./component/element/input/input";
 import { InputSetting } from "./component/element/input/inputSetting";
 import { InputButton } from "./component/element/input/inputButton";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import { Preview } from "./component/preview";
+import { DivContainerPreview } from "./component/container/divContainer/divContainerPreview";
+import { LabelPreview } from "./component/element/label/labelPreview";
+import { InputPreview } from "./component/element/input/inputPreview";
+import { UIElement } from "./models/UIElement";
+
+export const uiElements: UIElement[] = [];
+export const uiElementsMap: { [name: string]: UIElement } = {};
+
+function registerComponent(
+  name: string,
+  designComponent: any,
+  settingComponent: any,
+  previewComponent: any,
+  buttonComponent: any
+) {
+  const componentInfo = {
+    name,
+    designComponent,
+    settingComponent,
+    previewComponent,
+    buttonComponent,
+  };
+  uiElements.push(componentInfo);
+  uiElementsMap[name] = componentInfo;
+}
+
+registerComponent(
+  "DivContainer",
+  DivContainer,
+  DivContainerSetting,
+  DivContainerPreview,
+  DivContainerButton
+);
+registerComponent("Label", Label, LabelSetting, LabelPreview, LabelButton);
+registerComponent("Input", Input, InputSetting, InputPreview, InputButton);
 
 function replaceData(
   oldData: any,
@@ -174,50 +209,26 @@ const App = () => {
     if (!data) {
       return null;
     }
-    switch (data.type) {
-      case "DivContainer":
-        return (
-          <DivContainer
-            key={data.id}
-            data={data}
-            parentData={parentData}
-            selected={selectedItemIds.includes(data.id)}
-            draggable={rootData === data ? false : true}
-            onSizeChanged={onSizeChanged}
-            onClick={onClick}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-            onDrop={onDrop}
-          >
-            {data.children?.map((item: any) => renderByData(item, data))}
-          </DivContainer>
-        );
-      case "Label":
-        return (
-          <Label
-            key={data.id}
-            data={data}
-            parentData={parentData}
-            selected={selectedItemIds.includes(data.id)}
-            onSizeChanged={onSizeChanged}
-            onClick={onClick}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-          />
-        );
-      case "Input":
-        return (
-          <Input
-            key={data.id}
-            data={data}
-            parentData={parentData}
-            selected={selectedItemIds.includes(data.id)}
-            onSizeChanged={onSizeChanged}
-            onClick={onClick}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-          />
-        );
+    const componentInfo = uiElementsMap[data.type];
+    if (componentInfo) {
+      const DesignComponent = componentInfo.designComponent;
+      return (
+        <DesignComponent
+          key={data.id}
+          data={data}
+          rawData={data}
+          parentData={parentData}
+          selected={selectedItemIds.includes(data.id)}
+          draggable={rootData === data ? false : true}
+          onSizeChanged={onSizeChanged}
+          onClick={onClick}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          onDrop={onDrop}
+        >
+          {data.children?.map((item: any) => renderByData(item, data))}
+        </DesignComponent>
+      );
     }
 
     return null;
@@ -237,45 +248,36 @@ const App = () => {
 
   const [showPreview, setShowPreview] = useState(false);
 
+  const renderSetting = () => {
+    if (!!selectedData && uiElementsMap[selectedData.type]) {
+      const SettingComponent =
+        uiElementsMap[selectedData.type].settingComponent;
+      return (
+        <SettingComponent
+          data={selectedData}
+          onChange={onSelectedDataChanged}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-row items-center w-full h-full">
         <div className="flex-1 w-0 flex flex-col items-center h-full justify-center">
-          {renderByData(rootData, null)}
-        </div>
-        <div className="w-[300px] h-full border-l-[1px] border-solid border-l-gray-400 p-[16px] flex flex-col gap-[8px]">
-          <div>
+          <div>{renderByData(rootData, null)}</div>
+          <div className="flex flex-col items-end py-2">
             <button onClick={() => setShowPreview(true)}>Preview</button>
           </div>
-          <div>
-            <DivContainerButton />
-          </div>
-          <div>
-            <LabelButton />
-          </div>
-          <div>
-            <InputButton />
-          </div>
-          <div>
-            {!!selectedData && selectedData.type === "DivContainer" && (
-              <DivContainerSetting
-                data={selectedData}
-                onChange={onSelectedDataChanged}
-              />
-            )}
-            {!!selectedData && selectedData.type === "Label" && (
-              <LabelSetting
-                data={selectedData}
-                onChange={onSelectedDataChanged}
-              />
-            )}
-            {!!selectedData && selectedData.type === "Input" && (
-              <InputSetting
-                data={selectedData}
-                onChange={onSelectedDataChanged}
-              />
-            )}
-          </div>
+        </div>
+        <div className="w-[300px] h-full border-l-[1px] border-solid border-l-gray-400 p-[16px] flex flex-col gap-[8px]">
+          {uiElements.map((item) => (
+            <div key={item.name}>
+              <item.buttonComponent />
+            </div>
+          ))}
+          <div>{renderSetting()}</div>
         </div>
       </div>
       {showPreview && (
@@ -287,7 +289,11 @@ const App = () => {
           onOk={() => setShowPreview(false)}
         >
           <div className="pt-[30px]">
-          <Preview elementData={rootData} />
+            <Preview
+              elementData={{ ...rootData, border: undefined }}
+              uiElements={uiElements}
+              uiElementsMap={uiElementsMap}
+            />
           </div>
         </Modal>
       )}

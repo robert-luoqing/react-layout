@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { PositionModel } from "../../models/positionModel";
 import { positionUtil } from "../../utils/positionUtil";
 import { unitUtil } from "../../utils/unitUtil";
+import { isNil, omitBy } from "lodash";
 export interface ContainerModel {
   id: string;
   type: string;
@@ -13,6 +14,11 @@ export interface ContainerModel {
   right?: number | string;
   bottom?: number | string;
   border?: string;
+  borderLeft?: string;
+  borderRight?: string;
+  borderTop?: string;
+  borderBottom?: string;
+  borderRadius?: string | number;
   background?: string;
   position?: "absolute" | "static";
   display?: "block" | "inline-block";
@@ -24,10 +30,15 @@ export interface ContainerModel {
   // If the item name is "user", the child can be set value to {user.name}
   // like users.map(user => {....})
   forItemName?: string;
+  /**
+   * if条件，
+   */
+  if?: string;
 }
 
 export interface ComponentProps {
   children?: React.ReactNode;
+  rawData: ContainerModel;
   data: ContainerModel;
   parentData?: ContainerModel;
   selected?: boolean;
@@ -55,9 +66,6 @@ export interface ComponentProps {
 export interface ContainerProps extends ComponentProps {
   draggable?: boolean;
   resize?: "both" | "vertical" | "horizontal";
-  noPadding?: boolean;
-  noBorder?: boolean;
-  noBackground?: boolean;
 }
 
 export const Container = (props: ContainerProps) => {
@@ -80,7 +88,7 @@ export const Container = (props: ContainerProps) => {
         heightRef.current = height;
         if (isResizing.current) {
           props.onSizeChanged?.(
-            props.data,
+            props.rawData,
             {
               width:
                 props.resize === "both" || props.resize === "horizontal"
@@ -152,8 +160,8 @@ export const Container = (props: ContainerProps) => {
         event.clientX,
         event.clientY
       );
-      props.onDragStart?.(props.data, position, props.parentData);
-      console.log("onDragStart", props.data?.id, JSON.stringify(position));
+      props.onDragStart?.(props.rawData, position, props.parentData);
+      console.log("onDragStart", props.rawData?.id, JSON.stringify(position));
       event.dataTransfer.effectAllowed = "move";
       event.stopPropagation();
 
@@ -172,8 +180,8 @@ export const Container = (props: ContainerProps) => {
         event.clientX,
         event.clientY
       );
-      props.onDragEnd?.(props.data, position, props.parentData);
-      console.log("onDragEnd", props.data?.id, JSON.stringify(position));
+      props.onDragEnd?.(props.rawData, position, props.parentData);
+      console.log("onDragEnd", props.rawData?.id, JSON.stringify(position));
 
       setIsDragging(false);
     },
@@ -191,11 +199,23 @@ export const Container = (props: ContainerProps) => {
     (event) => {
       event.stopPropagation();
       if (!isResizing.current) {
-        props.onClick?.(props.data);
+        props.onClick?.(props.rawData);
       }
     },
     [props]
   );
+
+  const innerStyle = {
+    padding: props.data?.padding,
+    border: props.data?.border,
+    borderLeft: props.data?.borderLeft,
+    borderRight: props.data?.borderRight,
+    borderTop: props.data?.borderTop,
+    borderBottom: props.data?.borderBottom,
+    background: props.data?.background,
+    borderRadius: unitUtil.sizeParse(props.data?.borderRadius),
+  };
+
 
   return (
     <div
@@ -222,11 +242,7 @@ export const Container = (props: ContainerProps) => {
       <div className="w-full h-full relative overflow-hidden">
         <div
           className="w-full h-full relative overflow-hidden"
-          style={{
-            padding: props.noPadding ? undefined : props.data?.padding,
-            border: props.noBorder ? undefined : props.data?.border,
-            background: props.noBackground ? undefined : props.data?.background,
-          }}
+          style={omitBy(innerStyle, isNil)}
         >
           {props.children}
         </div>
