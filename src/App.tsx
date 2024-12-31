@@ -262,21 +262,27 @@ const App = () => {
     return null;
   };
 
+  const renderButtons = () => {
+    return uiElements.map((item) => (
+      <div key={item.name}>
+        <item.buttonComponent />
+      </div>
+    ));
+  };
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-row items-center w-full h-full">
+        <div className="w-[200px] h-full border-r-[1px] border-solid border-l-gray-400 p-[16px] flex flex-col gap-[8px]">
+          {renderButtons()}
+        </div>
         <div className="flex-1 w-0 flex flex-col items-center h-full justify-center">
           <div>{renderByData(rootData, null)}</div>
           <div className="flex flex-col items-end py-2">
             <button onClick={() => setShowPreview(true)}>Preview</button>
           </div>
         </div>
-        <div className="w-[300px] h-full border-l-[1px] border-solid border-l-gray-400 p-[16px] flex flex-col gap-[8px]">
-          {uiElements.map((item) => (
-            <div key={item.name}>
-              <item.buttonComponent />
-            </div>
-          ))}
+        <div className="w-[300px] h-full border-l-[1px] border-solid border-l-gray-400 p-[16px] flex flex-col gap-[8px] overflow-auto">
           <div>{renderSetting()}</div>
         </div>
       </div>

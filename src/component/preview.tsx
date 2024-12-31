@@ -102,44 +102,7 @@ export const Preview = (props: PreviewProps) => {
         </PreviewElement>
       );
     }
-    // switch (elementData.type) {
-    //   case "DivContainer":
-    //     return (
-    //       <DivContainerPreview
-    //         key={elementData.id + "-" + index}
-    //         rawElementData={elementData}
-    //         elementData={elementData}
-    //         data={data}
-    //         forData={[...forData]}
-    //       >
-    //         {elementData.children?.map((item: any) =>
-    //           renderByData(item, forData)
-    //         )}
-    //       </DivContainerPreview>
-    //     );
-    //   case "Label":
-    //     return (
-    //       <LabelPreview
-    //         key={elementData.id + "-" + index}
-    //         rawElementData={elementData}
-    //         elementData={elementData}
-    //         data={data}
-    //         forData={[...forData]}
-    //       />
-    //     );
-    //   case "Input":
-    //     return (
-    //       <InputPreview
-    //         key={elementData.id + "-" + index}
-    //         rawElementData={elementData}
-    //         elementData={elementData}
-    //         data={data}
-    //         forData={[...forData]}
-    //         onChange={onInputChange}
-    //       />
-    //     );
-    // }
-
+   
     return null;
   };
 
