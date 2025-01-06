@@ -3,16 +3,15 @@ import { useState } from "react";
 import { objUtil } from "../utils/objUtil";
 import { isNil } from "lodash";
 import { funcUtil } from "../utils/funcUtil";
-import { UIElement } from "../models/UIElement";
-
+import { usePreviewComponents } from "../hoc/previewComponentHoc";
 
 export interface PreviewProps {
   elementData: ContainerModel;
-  uiElements: UIElement[];
-  uiElementsMap: { [name: string]: UIElement } ;
 }
 
 export const Preview = (props: PreviewProps) => {
+  const { componentsMap: uiElementsMap } = usePreviewComponents();
+
   const [data, setData] = useState<any>({
     userName: "robert",
     users: [{ name: "Robert" }, { name: "Chris" }],
@@ -85,7 +84,7 @@ export const Preview = (props: PreviewProps) => {
     forData: Array<{ forItemName: string; forItemData: any }>,
     index?: number
   ) => {
-    const PreviewElement = props.uiElementsMap[elementData.type]?.previewComponent;
+    const PreviewElement = uiElementsMap[elementData.type]?.previewComponent;
     if (PreviewElement) {
       return (
         <PreviewElement
@@ -102,7 +101,7 @@ export const Preview = (props: PreviewProps) => {
         </PreviewElement>
       );
     }
-   
+
     return null;
   };
 
