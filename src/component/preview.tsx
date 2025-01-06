@@ -39,6 +39,8 @@ export const Preview = (props: PreviewProps) => {
     }
   };
 
+  const onClick = () => {};
+
   const renderByData = (
     elementData: any,
     forData: Array<{ forItemName: string; forItemData: any }>
@@ -94,6 +96,7 @@ export const Preview = (props: PreviewProps) => {
           data={data}
           forData={[...forData]}
           onChange={onInputChange}
+          onClick={onClick}
         >
           {elementData.children?.map((item: any) =>
             renderByData(item, forData)

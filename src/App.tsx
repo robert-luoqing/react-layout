@@ -21,6 +21,11 @@ import {
   DesignComponentProvider,
   registerDesignComponents,
 } from "./hoc/designComponentHoc";
+import { ButtonDesign } from "./component/element/button/buttonDesign";
+import { ButtonButton } from "./component/element/button/buttonButton";
+import { ButtonSetting } from "./component/element/button/buttonSetting";
+import { ButtonPreview } from "./component/element/button/buttonPreview";
+import { FunctionProvider } from "./hoc/functionHoc";
 
 function registerComponent(
   name: string,
@@ -44,14 +49,23 @@ registerComponent(
 );
 registerComponent("Label", Label, LabelSetting, LabelPreview, LabelButton);
 registerComponent("Input", Input, InputSetting, InputPreview, InputButton);
+registerComponent(
+  "Button",
+  ButtonDesign,
+  ButtonSetting,
+  ButtonPreview,
+  ButtonButton
+);
 
 const App = () => {
   return (
     <DesignComponentProvider>
       <PreviewComponentProvider>
-        <div className="w-full h-full">
-          <Design />
-        </div>
+        <FunctionProvider>
+          <div className="w-full h-full">
+            <Design />
+          </div>
+        </FunctionProvider>
       </PreviewComponentProvider>
     </DesignComponentProvider>
   );

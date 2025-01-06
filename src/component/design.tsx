@@ -8,9 +8,6 @@ import { Modal } from "antd";
 import { Preview } from "../component/preview";
 import { useDesignComponents } from "../hoc/designComponentHoc";
 
-// export const uiElements: UIElement[] = [];
-// export const uiElementsMap: { [name: string]: UIElement } = {};
-
 function replaceData(
   oldData: any,
   newData: any,
