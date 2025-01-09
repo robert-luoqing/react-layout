@@ -25,7 +25,7 @@ import { ButtonDesign } from "./component/element/button/buttonDesign";
 import { ButtonButton } from "./component/element/button/buttonButton";
 import { ButtonSetting } from "./component/element/button/buttonSetting";
 import { ButtonPreview } from "./component/element/button/buttonPreview";
-import { FunctionProvider } from "./hoc/functionHoc";
+import { FunctionProvider, registerFunctions } from "./hoc/functionHoc";
 
 function registerComponent(
   name: string,
@@ -56,6 +56,20 @@ registerComponent(
   ButtonPreview,
   ButtonButton
 );
+
+registerFunctions([
+  {
+    name: "test",
+    func: async (context: any) => {
+      return new Promise<void>((fulfill) => {
+        console.log("-----test-----", context);
+        setTimeout(() => {
+          fulfill();
+        }, 2000);
+      });
+    },
+  },
+]);
 
 const App = () => {
   return (

@@ -7,11 +7,21 @@ import { Button as AntdButton } from "antd";
 import { unitUtil } from "../../../utils/unitUtil";
 import { isNil, omitBy } from "lodash";
 
-export interface ButtonDesignModel extends ContainerModel {
+export interface FuncModel {
+  funcName?: string;
+  funcParam1?: string;
+  funcParam2?: string;
+  funcParam3?: string;
+  funcParam4?: string;
+  resultPath?: string;
+}
+
+export interface ButtonDesignModel extends ContainerModel, FuncModel {
   type: "Button";
   text?: string;
   fontSize?: number;
   fontWeight?: string;
+  loadingWhenExec?: boolean;
 }
 
 export interface ButtonDesignProps extends ComponentProps {

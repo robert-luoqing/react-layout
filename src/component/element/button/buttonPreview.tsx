@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Button as AntdButton } from "antd";
 import {
   ComponentPreviewProps,
@@ -7,14 +7,19 @@ import {
 import { objUtil } from "../../../utils/objUtil";
 import { unitUtil } from "../../../utils/unitUtil";
 import { isNil, omitBy } from "lodash";
-import { ButtonDesignModel } from "./buttonDesign";
+import { ButtonDesignModel, FuncModel } from "./buttonDesign";
 
 export interface ButtonPreviewProps extends ComponentPreviewProps {
   children?: undefined;
-  onClick?: () => void;
+  onClick?: (
+    funcName: FuncModel | null | undefined,
+    data: any,
+    forData: Array<{ forItemName: string; forItemData: any }>
+  ) => Promise<void>;
 }
 export const ButtonPreview = (props: ButtonPreviewProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+
   const elementData = props.elementData as ButtonDesignModel;
   const value = useMemo(() => {
     return objUtil.formatFromDataAndForData(
@@ -23,6 +28,7 @@ export const ButtonPreview = (props: ButtonPreviewProps) => {
       props.forData
     );
   }, [elementData?.text, props.data, props.forData]);
+
   const containerElementData = useMemo(() => {
     return {
       ...elementData,
@@ -48,14 +54,50 @@ export const ButtonPreview = (props: ButtonPreviewProps) => {
     background: elementData?.background,
     borderRadius: unitUtil.sizeParse(elementData?.borderRadius),
   };
+  const onClick = useCallback(async () => {
+    const elementData = props.elementData as ButtonDesignModel;
+    const funcName = elementData.funcName;
+    const funcParam1 = elementData.funcParam1;
+    const funcParam2 = elementData.funcParam2;
+    const funcParam3 = elementData.funcParam3;
+    const funcParam4 = elementData.funcParam4;
+    const resultPath = elementData.resultPath;
+
+    const loadingWhenExec = elementData.loadingWhenExec;
+    if (loadingWhenExec) {
+      setLoading(true);
+    }
+    try {
+      let func: FuncModel | null = null;
+      if (funcName) {
+        func = {
+          funcName,
+          funcParam1,
+          funcParam2,
+          funcParam3,
+          funcParam4,
+          resultPath
+        };
+      }
+      await props.onClick?.(func, props.data, props.forData);
+    } finally {
+      setLoading(false);
+    }
+  }, [props]);
+
   return (
     <ContainerPreview
       {...{ ...props, children: undefined }}
       elementData={containerElementData}
       rawElementData={props.rawElementData}
     >
-      <div ref={containerRef} className="w-full h-full">
-        <AntdButton className="w-full h-full" style={omitBy(innerStyle, isNil)} onClick={props.onClick}>
+      <div className="w-full h-full">
+        <AntdButton
+          className="w-full h-full"
+          style={omitBy(innerStyle, isNil)}
+          loading={loading}
+          onClick={onClick}
+        >
           {value || ""}
         </AntdButton>
       </div>

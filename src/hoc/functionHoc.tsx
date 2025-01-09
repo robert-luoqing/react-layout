@@ -2,11 +2,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FunctionInfo {
   name: string;
-  func: (context: any) => Promise<any>;
+  func: (context: any, param: any) => Promise<any> | void;
 }
 
 export interface FunctionModel {
-  functions: { [name: string]: (context: any) => Promise<any> };
+  functions: {
+    [name: string]: (context: any, param: any) => Promise<any> | void;
+  };
 }
 
 const defaultFunctionData: FunctionModel = {

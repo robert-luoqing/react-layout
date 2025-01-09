@@ -228,6 +228,21 @@ export const Design = () => {
     ));
   };
 
+  const [testData] = useState<any>({
+    userName: "robert",
+    users: [{ name: "Robert" }, { name: "Chris" }],
+  });
+
+  const [localFuncs] = useState({
+    test: async (context: any, param: any) => {
+      return new Promise<any>((fulfill) => {
+        setTimeout(() => {
+          fulfill({ order: { name: "test"+ param.funcParam1} });
+        }, 1000);
+      });
+    },
+  });
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-row items-center w-full h-full">
@@ -255,6 +270,9 @@ export const Design = () => {
           <div className="pt-[30px]">
             <Preview
               elementData={{ ...rootElement, border: undefined }}
+              initializeData={testData}
+              dataLoadPolicy="LoadOnce"
+              localFuncs={localFuncs}
             />
           </div>
         </Modal>

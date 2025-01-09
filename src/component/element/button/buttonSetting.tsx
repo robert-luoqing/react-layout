@@ -1,8 +1,9 @@
 import { useCallback } from "react";
 import { ContainerSetting } from "../../common/containerSetting";
 
-import { Input } from "antd";
+import { Checkbox, Input } from "antd";
 import { ButtonDesignModel } from "./buttonDesign";
+import { ExpandSetting } from "../../expandSetting";
 
 export interface ButtonSettingProps {
   data: ButtonDesignModel;
@@ -10,6 +11,7 @@ export interface ButtonSettingProps {
 }
 
 export const ButtonSetting = (props: ButtonSettingProps) => {
+
   const onTextChange = useCallback(
     (event: any) => {
       const value = event.target.value;
@@ -18,6 +20,16 @@ export const ButtonSetting = (props: ButtonSettingProps) => {
     },
     [props]
   );
+  const onCheckboxChange = useCallback(
+    (event: any) => {
+      const value = event.target.checked;
+      const tag = event.target["data-tag"];
+
+      props.onChange(tag, value);
+    },
+    [props]
+  );
+  
   return (
     <div className="flex flex-col gap-2">
       <div>
@@ -58,6 +70,91 @@ export const ButtonSetting = (props: ButtonSettingProps) => {
       </div>
 
       <ContainerSetting data={props.data} onChange={props.onChange} />
+
+      <ExpandSetting>
+        <div>
+          <div className="font-bold text-[10px]">Function Name</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="funcName"
+              value={props.data.funcName}
+              onChange={onTextChange}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold text-[10px]">Param1</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="funcParam1"
+              value={props.data.funcParam1}
+              onChange={onTextChange}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold text-[10px]">Param2</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="funcParam2"
+              value={props.data.funcParam2}
+              onChange={onTextChange}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold text-[10px]">Param3</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="funcParam3"
+              value={props.data.funcParam3}
+              onChange={onTextChange}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold text-[10px]">Param4</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="funcParam4"
+              value={props.data.funcParam4}
+              onChange={onTextChange}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold text-[10px]">Result Path</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="resultPath"
+              value={props.data.resultPath}
+              onChange={onTextChange}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold text-[10px]">Loading when click</div>
+          <div>
+            <Checkbox
+              data-tag="loadingWhenExec"
+              checked={props.data.loadingWhenExec}
+              onChange={onCheckboxChange}
+            />
+          </div>
+        </div>
+      </ExpandSetting>
     </div>
   );
 };
