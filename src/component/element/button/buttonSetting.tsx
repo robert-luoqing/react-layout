@@ -3,7 +3,7 @@ import { ContainerSetting } from "../../common/containerSetting";
 
 import { Checkbox, Input } from "antd";
 import { ButtonDesignModel } from "./buttonDesign";
-import { ExpandSetting } from "../../expandSetting";
+import { ExpandSetting } from "../../common/expandSetting";
 
 export interface ButtonSettingProps {
   data: ButtonDesignModel;
@@ -71,7 +71,7 @@ export const ButtonSetting = (props: ButtonSettingProps) => {
 
       <ContainerSetting data={props.data} onChange={props.onChange} />
 
-      <ExpandSetting>
+      <ExpandSetting title="Click Setting">
         <div>
           <div className="font-bold text-[10px]">Function Name</div>
           <div>
