@@ -65,7 +65,7 @@ export interface ComponentProps {
 
 export interface ContainerProps extends ComponentProps {
   draggable?: boolean;
-  resize?: "both" | "vertical" | "horizontal";
+  resize?: "both" | "vertical" | "horizontal" | "none";
 }
 
 export const Container = (props: ContainerProps) => {
@@ -215,7 +215,6 @@ export const Container = (props: ContainerProps) => {
     background: props.data?.background,
     borderRadius: unitUtil.sizeParse(props.data?.borderRadius),
   };
-
 
   return (
     <div

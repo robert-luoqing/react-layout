@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Select } from "antd";
 import { ContainerModel } from "./container";
-import { TextSettingItem } from "./textSettingItem";
+import { TextSettingItem } from "./items/textSettingItem";
 import { ExpandSetting } from "./expandSetting";
 
 export interface ContainerSettingProps {

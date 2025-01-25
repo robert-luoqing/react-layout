@@ -42,7 +42,7 @@ export const Preview = (props: PreviewProps) => {
   }, [dataLoadPolicy, initializeData]);
 
   const onInputChange = (
-    val: string,
+    val: any,
     path: string | undefined,
     data: any,
     forData: Array<{ forItemName: string; forItemData: any }>

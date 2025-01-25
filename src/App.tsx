@@ -26,6 +26,10 @@ import { ButtonButton } from "./component/element/button/buttonButton";
 import { ButtonSetting } from "./component/element/button/buttonSetting";
 import { ButtonPreview } from "./component/element/button/buttonPreview";
 import { FunctionProvider, registerFunctions } from "./hoc/functionHoc";
+import { FetchDesign } from "./component/serviceComponent/fetch/fetchDesign";
+import { FetchSetting } from "./component/serviceComponent/fetch/fetchSetting";
+import { FetchService } from "./component/serviceComponent/fetch/fetchService";
+import { FetchButton } from "./component/serviceComponent/fetch/fetchButton";
 
 function registerComponent(
   name: string,
@@ -55,6 +59,14 @@ registerComponent(
   ButtonSetting,
   ButtonPreview,
   ButtonButton
+);
+
+registerComponent(
+  "FetchService",
+  FetchDesign,
+  FetchSetting,
+  FetchService,
+  FetchButton
 );
 
 registerFunctions([
