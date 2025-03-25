@@ -1,4 +1,4 @@
-import { ContainerModel } from "./common/container";
+import { ContainerModel } from "./common/containerDesign";
 import { useEffect, useRef, useState } from "react";
 import { objUtil } from "../utils/objUtil";
 import { isNil } from "lodash";
@@ -6,6 +6,9 @@ import { funcUtil } from "../utils/funcUtil";
 import { usePreviewComponents } from "../hoc/previewComponentHoc";
 import { useFunctions } from "../hoc/functionHoc";
 import { FuncModel } from "./element/button/buttonDesign";
+import { Button } from "antd";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export interface PreviewProps {
   elementData: ContainerModel;
@@ -166,12 +169,60 @@ export const Preview = (props: PreviewProps) => {
     return null;
   };
 
+  const printElement = useRef<HTMLDivElement>(null);
+  const onPrint = async () => {
+    const content = printElement.current;
+    if (content) {
+      const rect = content.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+
+      const canvas = await html2canvas(content, { scale: 1 });
+      const image = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("l", "px", [width, height]);
+      pdf.addImage(image, "PNG", 0, 0, width, height);
+      const page2 = pdf.addPage([width, height], "l");
+      page2.addImage(image, "PNG", 0, 0, width, height);
+      // pdf.save("generated.pdf");
+      pdf.autoPrint();
+
+      const hiddFrame: any = document.createElement("iframe");
+      hiddFrame.style.position = "fixed";
+      // "visibility: hidden" would trigger safety rules in some browsers like safari，
+      // in which the iframe display in a pretty small size instead of hidden.
+      // here is some little hack ~
+      hiddFrame.style.width = "1px";
+      hiddFrame.style.height = "1px";
+      hiddFrame.style.opacity = "0.01";
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        window.navigator.userAgent
+      );
+      if (isSafari) {
+        // fallback in safari
+        hiddFrame.onload = () => {
+          try {
+            hiddFrame.contentWindow.document.execCommand("print", false, null);
+          } catch (e) {
+            hiddFrame.contentWindow.print();
+          }
+        };
+      }
+      hiddFrame.src = pdf.output("bloburl").toString();
+      document.body.appendChild(hiddFrame);
+    }
+  };
   return (
     <div className="w-full h-full">
       <div className="flex flex-row items-center w-full h-full">
-        <div className="flex-1 w-0 flex flex-col items-center h-full justify-center">
+        <div
+          className="flex-1 w-0 flex flex-col items-center h-full justify-center"
+          ref={printElement}
+        >
           {renderByData(props.elementData, [])}
         </div>
+      </div>
+      <div>
+        <Button onClick={onPrint}>Print</Button>
       </div>
     </div>
   );

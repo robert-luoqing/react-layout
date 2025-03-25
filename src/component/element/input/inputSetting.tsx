@@ -1,11 +1,12 @@
 import { useCallback } from "react";
 import { ContainerSetting } from "../../common/containerSetting";
-import { InputModel } from "./input";
+import { InputModel } from "./inputDesign";
 import { Input } from "antd";
 
 export interface InputSettingProps {
   data: InputModel;
   onChange: (key: string, value: any) => void;
+  onDelete: () => void;
 }
 
 export const InputSetting = (props: InputSettingProps) => {
@@ -19,56 +20,60 @@ export const InputSetting = (props: InputSettingProps) => {
   );
   return (
     <div className="flex flex-col gap-2">
-      <div>
-        <div className="font-bold text-[10px]">Type</div>
+      <ContainerSetting
+        data={props.data}
+        onChange={props.onChange}
+        onDelete={props.onDelete}
+      >
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="rawType"
-            value={props.data.rawType}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Type</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="rawType"
+              value={props.data.rawType}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="font-bold text-[10px]">Text</div>
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="text"
-            value={props.data.text}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Text</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="text"
+              value={props.data.text}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="font-bold text-[10px]">Font Size</div>
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="fontSize"
-            value={props.data.fontSize}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Font Size</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="fontSize"
+              value={props.data.fontSize}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="font-bold text-[10px]">Font Weight</div>
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="fontWeight"
-            value={props.data.fontWeight}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Font Weight</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="fontWeight"
+              value={props.data.fontWeight}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
-
-      <ContainerSetting data={props.data} onChange={props.onChange} />
+      </ContainerSetting>
     </div>
   );
 };

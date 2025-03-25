@@ -2,7 +2,7 @@ import {
   Container,
   ContainerModel,
   ComponentProps,
-} from "../../common/container";
+} from "../../common/containerDesign";
 import { Button as AntdButton } from "antd";
 import { unitUtil } from "../../../utils/unitUtil";
 import { isNil, omitBy } from "lodash";

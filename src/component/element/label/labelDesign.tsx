@@ -3,7 +3,7 @@ import {
   Container,
   ContainerModel,
   ComponentProps,
-} from "../../common/container";
+} from "../../common/containerDesign";
 
 export interface LabelModel extends ContainerModel {
   type: "Label";
@@ -17,7 +17,7 @@ export interface LabelModel extends ContainerModel {
 export interface LabelProps extends ComponentProps {
   children?: undefined;
 }
-export const Label = (props: LabelProps) => {
+export const LabelDesign = (props: LabelProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const data = props.data as LabelModel;
   const alignItems = useMemo(() => {

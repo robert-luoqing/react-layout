@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { Container, ContainerModel, ComponentProps } from "../../common/container";
+import { Container, ContainerModel, ComponentProps } from "../../common/containerDesign";
 import { PositionModel } from "../../../models/positionModel";
 import { positionUtil } from "../../../utils/positionUtil";
 

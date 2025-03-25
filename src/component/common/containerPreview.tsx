@@ -1,6 +1,6 @@
 import { isNil, omitBy } from "lodash";
 import { unitUtil } from "../../utils/unitUtil";
-import { ContainerModel } from "./container";
+import { ContainerModel } from "./containerDesign";
 
 export interface ComponentPreviewProps {
   children?: React.ReactNode;
@@ -26,8 +26,8 @@ export const ContainerPreview = (props: ContainerPreviewProps) => {
 
   return (
     <div
-      className="overflow-auto"
       style={{
+        overflow: "auto",
         width: unitUtil.sizeParse(props.elementData?.width),
         height: unitUtil.sizeParse(props.elementData?.height),
         display: props.elementData?.display || "block",
@@ -36,12 +36,25 @@ export const ContainerPreview = (props: ContainerPreviewProps) => {
         left: unitUtil.sizeParse(props.elementData?.left),
         right: unitUtil.sizeParse(props.elementData?.right),
         bottom: unitUtil.sizeParse(props.elementData?.bottom),
+        zIndex: props.elementData.zIndex,
       }}
     >
-      <div className="w-full h-full relative overflow-hidden">
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         <div
-          className="w-full h-full relative overflow-hidden"
-          style={omitBy(innerStyle, isNil)}
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            overflow: "hidden",
+            ...omitBy(innerStyle, isNil),
+          }}
         >
           {props.children}
         </div>

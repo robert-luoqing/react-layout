@@ -3,7 +3,7 @@ import {
   Container,
   ContainerModel,
   ComponentProps,
-} from "../../common/container";
+} from "../../common/containerDesign";
 import { Input as AntdInput } from "antd";
 import { unitUtil } from "../../../utils/unitUtil";
 import { isNil, omitBy } from "lodash";
@@ -19,7 +19,7 @@ export interface InputModel extends ContainerModel {
 export interface InputProps extends ComponentProps {
   children?: undefined;
 }
-export const Input = (props: InputProps) => {
+export const InputDesign = (props: InputProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const data = props.data as InputModel;
   const containerData = {

@@ -8,10 +8,10 @@ import { ExpandSetting } from "../../common/expandSetting";
 export interface ButtonSettingProps {
   data: ButtonDesignModel;
   onChange: (key: string, value: any) => void;
+  onDelete: () => void;
 }
 
 export const ButtonSetting = (props: ButtonSettingProps) => {
-
   const onTextChange = useCallback(
     (event: any) => {
       const value = event.target.value;
@@ -29,132 +29,136 @@ export const ButtonSetting = (props: ButtonSettingProps) => {
     },
     [props]
   );
-  
+
   return (
     <div className="flex flex-col gap-2">
-      <div>
-        <div className="font-bold text-[10px]">Text</div>
+      <ContainerSetting
+        data={props.data}
+        onChange={props.onChange}
+        onDelete={props.onDelete}
+      >
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="text"
-            value={props.data.text}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Text</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="text"
+              value={props.data.text}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="font-bold text-[10px]">Font Size</div>
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="fontSize"
-            value={props.data.fontSize}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Font Size</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="fontSize"
+              value={props.data.fontSize}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="font-bold text-[10px]">Font Weight</div>
         <div>
-          <Input
-            type="text"
-            className="w-full"
-            data-tag="fontWeight"
-            value={props.data.fontWeight}
-            onChange={onTextChange}
-          />
+          <div className="font-bold text-[10px]">Font Weight</div>
+          <div>
+            <Input
+              type="text"
+              className="w-full"
+              data-tag="fontWeight"
+              value={props.data.fontWeight}
+              onChange={onTextChange}
+            />
+          </div>
         </div>
-      </div>
 
-      <ContainerSetting data={props.data} onChange={props.onChange} />
-
-      <ExpandSetting title="Click Setting">
-        <div>
-          <div className="font-bold text-[10px]">Function Name</div>
+        <ExpandSetting title="Click Setting">
           <div>
-            <Input
-              type="text"
-              className="w-full"
-              data-tag="funcName"
-              value={props.data.funcName}
-              onChange={onTextChange}
-            />
+            <div className="font-bold text-[10px]">Function Name</div>
+            <div>
+              <Input
+                type="text"
+                className="w-full"
+                data-tag="funcName"
+                value={props.data.funcName}
+                onChange={onTextChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="font-bold text-[10px]">Param1</div>
           <div>
-            <Input
-              type="text"
-              className="w-full"
-              data-tag="funcParam1"
-              value={props.data.funcParam1}
-              onChange={onTextChange}
-            />
+            <div className="font-bold text-[10px]">Param1</div>
+            <div>
+              <Input
+                type="text"
+                className="w-full"
+                data-tag="funcParam1"
+                value={props.data.funcParam1}
+                onChange={onTextChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="font-bold text-[10px]">Param2</div>
           <div>
-            <Input
-              type="text"
-              className="w-full"
-              data-tag="funcParam2"
-              value={props.data.funcParam2}
-              onChange={onTextChange}
-            />
+            <div className="font-bold text-[10px]">Param2</div>
+            <div>
+              <Input
+                type="text"
+                className="w-full"
+                data-tag="funcParam2"
+                value={props.data.funcParam2}
+                onChange={onTextChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="font-bold text-[10px]">Param3</div>
           <div>
-            <Input
-              type="text"
-              className="w-full"
-              data-tag="funcParam3"
-              value={props.data.funcParam3}
-              onChange={onTextChange}
-            />
+            <div className="font-bold text-[10px]">Param3</div>
+            <div>
+              <Input
+                type="text"
+                className="w-full"
+                data-tag="funcParam3"
+                value={props.data.funcParam3}
+                onChange={onTextChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="font-bold text-[10px]">Param4</div>
           <div>
-            <Input
-              type="text"
-              className="w-full"
-              data-tag="funcParam4"
-              value={props.data.funcParam4}
-              onChange={onTextChange}
-            />
+            <div className="font-bold text-[10px]">Param4</div>
+            <div>
+              <Input
+                type="text"
+                className="w-full"
+                data-tag="funcParam4"
+                value={props.data.funcParam4}
+                onChange={onTextChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="font-bold text-[10px]">Result Path</div>
           <div>
-            <Input
-              type="text"
-              className="w-full"
-              data-tag="resultPath"
-              value={props.data.resultPath}
-              onChange={onTextChange}
-            />
+            <div className="font-bold text-[10px]">Result Path</div>
+            <div>
+              <Input
+                type="text"
+                className="w-full"
+                data-tag="resultPath"
+                value={props.data.resultPath}
+                onChange={onTextChange}
+              />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="font-bold text-[10px]">Loading when click</div>
           <div>
-            <Checkbox
-              data-tag="loadingWhenExec"
-              checked={props.data.loadingWhenExec}
-              onChange={onCheckboxChange}
-            />
+            <div className="font-bold text-[10px]">Loading when click</div>
+            <div>
+              <Checkbox
+                data-tag="loadingWhenExec"
+                checked={props.data.loadingWhenExec}
+                onChange={onCheckboxChange}
+              />
+            </div>
           </div>
-        </div>
-      </ExpandSetting>
+        </ExpandSetting>
+      </ContainerSetting>
     </div>
   );
 };

@@ -2,10 +2,12 @@ import { TextSettingItem } from "../../common/items/textSettingItem";
 import { CheckboxSettingItem } from "../../common/items/checkboxSettingItem";
 import { FetchServiceModel } from "./fetchDesign";
 import { SelectSettingItem } from "../../common/items/selectSettingItem";
+import { Button } from "antd";
 
 export interface FetchSettingProps {
   data: FetchServiceModel;
   onChange: (key: string, value: any) => void;
+  onDelete: () => void;
 }
 
 export const FetchSetting = (props: FetchSettingProps) => {
@@ -98,6 +100,11 @@ export const FetchSetting = (props: FetchSettingProps) => {
           />
         </>
       )}
+       <div>
+        <Button className="w-full" danger={true} onClick={props.onDelete}>
+          Delete
+        </Button>
+      </div>
     </div>
   );
 };

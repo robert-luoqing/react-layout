@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { DivContainerModel } from "../component/container/divContainer/divContainer";
 import { v4 as uuidv4 } from "uuid";
 import { PositionModel } from "../models/positionModel";
-import { ContainerModel } from "../component/common/container";
+import { ContainerModel } from "./common/containerDesign";
 import { arrayUtil } from "../utils/arrayUtil";
 import { Modal } from "antd";
 import { Preview } from "../component/preview";
@@ -30,15 +30,15 @@ function replaceData(
 }
 
 function getSelectedDataById(
-  rootElement: Partial<{ id: string; children?: any[] }>,
+  currElement: Partial<{ id: string; children?: any[] }>,
   id: string
 ): any | null {
-  if (rootElement) {
-    if (rootElement.id === id) {
-      return rootElement;
+  if (currElement) {
+    if (currElement.id === id) {
+      return currElement;
     }
-    if (rootElement.children) {
-      for (const child of rootElement.children) {
+    if (currElement.children) {
+      for (const child of currElement.children) {
         const result = getSelectedDataById(child, id);
         if (result) {
           return result;
@@ -134,18 +134,34 @@ export const Design = () => {
       const dragParentObj: ContainerModel = dragData.parentData;
       const dropObj: ContainerModel = data;
       const newDragObj = { ...dragObj };
-      arrayUtil.removeItemByFilter(
-        dragParentObj?.children || [],
-        (item: any) => dragObj.id === item.id
-      );
-      if (dragObj.position === "absolute") {
-        newDragObj.top = newY + paddingTop;
-        newDragObj.left = newX + paddingLeft;
-        newDragObj.bottom = undefined;
-        newDragObj.right = undefined;
-        dropObj.children = [...(dropObj.children || []), newDragObj];
+
+      if (dropObj.id === dragParentObj.id) {
+        if (dragObj.position === "absolute") {
+          dragObj.top = newY + paddingTop;
+          dragObj.left = newX + paddingLeft;
+          dragObj.bottom = undefined;
+          dragObj.right = undefined;
+        } else {
+          arrayUtil.removeItemByFilter(
+            dragParentObj?.children || [],
+            (item: any) => dragObj.id === item.id
+          );
+          dropObj.children = [...(dropObj.children || []), newDragObj];
+        }
       } else {
-        dropObj.children = [...(dropObj.children || []), newDragObj];
+        arrayUtil.removeItemByFilter(
+          dragParentObj?.children || [],
+          (item: any) => dragObj.id === item.id
+        );
+        if (dragObj.position === "absolute") {
+          newDragObj.top = newY + paddingTop;
+          newDragObj.left = newX + paddingLeft;
+          newDragObj.bottom = undefined;
+          newDragObj.right = undefined;
+          dropObj.children = [...(dropObj.children || []), newDragObj];
+        } else {
+          dropObj.children = [...(dropObj.children || []), newDragObj];
+        }
       }
 
       setRootElement({ ...rootElement });
@@ -204,6 +220,41 @@ export const Design = () => {
     setRootElement({ ...rootElement });
   };
 
+  const removeFromId = (
+    id: string,
+    currElement: Partial<{
+      id: string;
+      children?: any[];
+    }>
+  ): boolean => {
+    let removed = false;
+    let newChildren: any[] | undefined = undefined;
+    if (currElement.children) {
+      newChildren = [];
+      for (const child of currElement.children) {
+        if (child?.id === id) {
+          removed = true;
+        } else {
+          newChildren.push(child);
+          if (!removed) {
+            removed = removeFromId(id, child);
+          }
+        }
+      }
+    }
+    currElement.children = newChildren;
+    return removed;
+  };
+
+  const onComponentDeleted = () => {
+    if (selectedItemIds.length === 0) {
+      return null;
+    }
+    const id = selectedItemIds[0];
+    removeFromId(id, rootElement);
+    setRootElement({ ...rootElement });
+  };
+
   const [showPreview, setShowPreview] = useState(false);
 
   const renderSetting = () => {
@@ -214,6 +265,7 @@ export const Design = () => {
         <SettingComponent
           data={selectedData}
           onChange={onSelectedDataChanged}
+          onDelete={onComponentDeleted}
         />
       );
     }
@@ -237,7 +289,7 @@ export const Design = () => {
     test: async (context: any, param: any) => {
       return new Promise<any>((fulfill) => {
         setTimeout(() => {
-          fulfill({ order: { name: "test"+ param.funcParam1} });
+          fulfill({ order: { name: "test" + param.funcParam1 } });
         }, 1000);
       });
     },

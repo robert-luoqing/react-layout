@@ -3,7 +3,7 @@ import {
   ComponentPreviewProps,
   ContainerPreview,
 } from "../../common/containerPreview";
-import { LabelModel } from "./label";
+import { LabelModel } from "./labelDesign";
 import { objUtil } from "../../../utils/objUtil";
 
 export interface LabelPreviewProps extends ComponentPreviewProps {
@@ -47,8 +47,11 @@ export const LabelPreview = (props: LabelPreviewProps) => {
     >
       <div
         ref={containerRef}
-        className="w-full h-full flex flex-row"
         style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "row",
           fontSize: elementData?.fontSize,
           fontWeight: elementData?.fontWeight,
           justifyContent,

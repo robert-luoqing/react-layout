@@ -4,7 +4,7 @@ import {
   ComponentPreviewProps,
   ContainerPreview,
 } from "../../common/containerPreview";
-import { InputModel } from "./input";
+import { InputModel } from "./inputDesign";
 import { objUtil } from "../../../utils/objUtil";
 import { unitUtil } from "../../../utils/unitUtil";
 import { isNil, omitBy } from "lodash";

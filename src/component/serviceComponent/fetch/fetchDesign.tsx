@@ -2,7 +2,7 @@ import {
   Container,
   ComponentProps,
   ContainerModel,
-} from "../../common/container";
+} from "../../common/containerDesign";
 import { CloudDownloadOutlined } from "@ant-design/icons";
 
 export interface FetchServiceModel extends ContainerModel {

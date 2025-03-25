@@ -34,6 +34,10 @@ export interface ContainerModel {
    * if条件，
    */
   if?: string;
+  // 禁止drag和resize
+  frozen?: boolean;
+
+  zIndex?: number;
 }
 
 export interface ComponentProps {
@@ -220,7 +224,7 @@ export const Container = (props: ContainerProps) => {
     <div
       ref={resizableRef}
       className="resize overflow-auto"
-      draggable={props.draggable}
+      draggable={props.data?.frozen ? undefined : props.draggable}
       onMouseDown={onHandleMouseDown}
       onDragStart={onDragStart}
       onDrag={onDrag}
@@ -229,13 +233,16 @@ export const Container = (props: ContainerProps) => {
       style={{
         width: unitUtil.sizeParse(props.data?.width),
         height: unitUtil.sizeParse(props.data?.height),
-        resize: props.resize,
+        resize: props.data?.frozen ? "none" : props.resize,
         display: isDragging ? "none" : props.data?.display || "block",
         position: props.data?.position || "static",
         top: unitUtil.sizeParse(props.data?.top),
         left: unitUtil.sizeParse(props.data?.left),
         right: unitUtil.sizeParse(props.data?.right),
         bottom: unitUtil.sizeParse(props.data?.bottom),
+        zIndex: props.data?.zIndex,
+        minWidth: 15,
+        minHeight: 15,
       }}
     >
       <div className="w-full h-full relative overflow-hidden">

@@ -1,16 +1,16 @@
 import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export const LabelButton = () => {
+export const VerticalLineButton = () => {
   const onDragStart: React.DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       const data = {
         id: uuidv4(),
-        type: "Label",
+        type: "VerticalLine",
         position: "absolute",
-        text: "Label",
-        display: "inline-block",
-        padding: '2px',
+        display: "block",
+        height: 100,
+        width: 15,
         children: [],
       };
       event.dataTransfer.setData("text/plain", JSON.stringify(data));
@@ -24,7 +24,7 @@ export const LabelButton = () => {
       draggable="true"
       onDragStart={onDragStart}
     >
-      Label
+      Vertical Line
     </div>
   );
 };

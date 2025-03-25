@@ -6,8 +6,11 @@ import {
 export interface DivContainerPreviewProps extends ComponentPreviewProps {}
 export const DivContainerPreview = (props: DivContainerPreviewProps) => {
   return (
-    <ContainerPreview {...{ ...props, children: undefined }} elementData={props.elementData}>
-      <div className="w-full h-full">{props.children}</div>
+    <ContainerPreview
+      {...{ ...props, children: undefined }}
+      elementData={props.elementData}
+    >
+      <div style={{ width: "100%", height: "100%" }}>{props.children}</div>
     </ContainerPreview>
   );
 };

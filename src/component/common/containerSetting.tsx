@@ -1,12 +1,15 @@
 import { useCallback } from "react";
-import { Select } from "antd";
-import { ContainerModel } from "./container";
+import { Button, Select } from "antd";
+import { ContainerModel } from "./containerDesign";
 import { TextSettingItem } from "./items/textSettingItem";
 import { ExpandSetting } from "./expandSetting";
+import { CheckboxSettingItem } from "./items/checkboxSettingItem";
 
 export interface ContainerSettingProps {
   data: ContainerModel;
   onChange: (key: string, value: any) => void;
+  children?: React.ReactNode;
+  onDelete: () => void;
 }
 
 export const ContainerSetting = (props: ContainerSettingProps) => {
@@ -24,6 +27,7 @@ export const ContainerSetting = (props: ContainerSettingProps) => {
         value={props.data.id}
         onChange={props.onChange}
       />
+      {props.children}
       <TextSettingItem
         title="Background"
         tag="background"
@@ -170,6 +174,23 @@ export const ContainerSetting = (props: ContainerSettingProps) => {
           />
         </div>
       </ExpandSetting>
+      <TextSettingItem
+        title="zIndex"
+        tag="zIndex"
+        value={props.data.zIndex}
+        onChange={props.onChange}
+      />
+      <CheckboxSettingItem
+        title="Frozen"
+        tag="frozen"
+        value={props.data.frozen}
+        onChange={props.onChange}
+      />
+      <div>
+        <Button className="w-full" danger={true} onClick={props.onDelete}>
+          Delete
+        </Button>
+      </div>
     </div>
   );
 };

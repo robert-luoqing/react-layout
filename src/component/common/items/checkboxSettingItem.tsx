@@ -21,7 +21,7 @@ export const CheckboxSettingItem = (props: CheckboxSettingItemProps) => {
     <div>
       <div className="font-bold text-[10px]">{props.title}</div>
       <div>
-        <Checkbox value={props.value} onChange={onCheckboxChange} />
+        <Checkbox checked={props.value} onChange={onCheckboxChange} />
       </div>
     </div>
   );
